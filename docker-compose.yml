@@ -4,8 +4,7 @@ services:
         build: 
             context: ./redis_db
         image: jeshocarmel/mysimpleapp_db
-        # ports: 
-        #     - "6379:6379"
+
         networks:
             - back-tier
         volumes: 

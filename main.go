@@ -57,7 +57,7 @@ func ping(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 		Message string
 		Visits  string
 	}{
-		Message: "This is a simple ping from the App",
+		Message: "This is a simple ping message from the App",
 		Visits:  getVisitCount(),
 	}
 
