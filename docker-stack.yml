@@ -1,7 +1,7 @@
 version: '3.2'
 services: 
     db:
-        image: jeshocarmel/docker_go_redis_db
+        image: jeshocarmel/mysimpleapp_db
         networks:
             - back-tier
         volumes: 
@@ -12,7 +12,7 @@ services:
                 - 'node.role == worker'
 
     app:
-        image: jeshocarmel/docker_go_redis_app
+        image: jeshocarmel/mysimpleapp_app
         depends_on: 
            - db
         networks:
