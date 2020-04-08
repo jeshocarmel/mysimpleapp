@@ -1,0 +1,32 @@
+version: '3'
+services: 
+    db:
+        build: 
+            context: ./redis_db
+        image: jeshocarmel/mysimpleapp_db
+        # ports: 
+        #     - "6379:6379"
+        networks:
+            - back-tier
+        volumes: 
+            - data:/dump.rdb
+        tty: true
+        container_name: mysimpleapp_db
+
+    app:
+        build: .
+        image: jeshocarmel/mysimpleapp_app
+        depends_on: 
+           - db
+        networks:
+            - back-tier
+        ports: 
+            - "80:80"
+        tty: true
+        container_name: mysimpleapp_app
+
+volumes:
+    data:
+
+networks: 
+    back-tier:

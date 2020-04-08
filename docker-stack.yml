@@ -1,0 +1,57 @@
+version: '3.2'
+services: 
+    db:
+        image: jeshocarmel/docker_go_redis_db
+        networks:
+            - back-tier
+        volumes: 
+            - data:/dump.rdb
+        deploy:
+            placement:
+                constraints:
+                - 'node.role == worker'
+
+    app:
+        image: jeshocarmel/docker_go_redis_app
+        depends_on: 
+           - db
+        networks:
+            - back-tier
+
+        deploy:
+            replicas: 2
+            update_config:
+                parallelism: 2
+                failure_action: rollback
+            placement:
+                constraints:
+                - 'node.role == worker'
+            restart_policy:
+                condition: on-failure
+                delay: 5s
+                max_attempts: 3
+                window: 120s
+          
+        ports: 
+            - "80:80"
+        tty: true
+
+    visualizer:
+        image: dockersamples/visualizer:stable
+        ports:
+        - "8001:8080"
+        stop_grace_period: 1m30s
+        volumes:
+        - "/var/run/docker.sock:/var/run/docker.sock"
+        deploy:
+            update_config:
+                failure_action: rollback
+            placement:
+                constraints:
+                - 'node.role == manager'
+
+volumes:
+    data:
+
+networks: 
+    back-tier:
