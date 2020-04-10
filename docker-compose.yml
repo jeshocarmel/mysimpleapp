@@ -1,31 +1,61 @@
 version: '3'
 services: 
-    db:
+    cache:
         build: 
             context: ./redis_db
-        image: jeshocarmel/mysimpleapp_db
+        image: jeshocarmel/mysimpleapp_cache
 
         networks:
-            - back-tier
+            - cache-tier
         volumes: 
-            - data:/dump.rdb
+            - cache_data:/dump.rdb
+        tty: true
+        container_name: mysimpleapp_cache
+
+    db:
+        build: 
+            context: ./mysql_db
+        image: jeshocarmel/mysimpleapp_db
+
+        networks: 
+            - back-tier
+        command: 
+            --explicit_defaults_for_timestamp
+            --default-authentication-plugin=mysql_native_password
+        environment: 
+            TZ: Asia/Singapore
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+        volumes: 
+            - db_data:/var/lib/mysql
+
         tty: true
         container_name: mysimpleapp_db
 
     app:
-        build: .
+        build: 
+            context: ./app
         image: jeshocarmel/mysimpleapp_app
+        environment: 
+            WAIT_HOSTS: db:3306
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            REDIS_PASSWORD: ${REDIS_PASSWORD}
         depends_on: 
+           - cache
            - db
         networks:
             - back-tier
+            - cache-tier
         ports: 
             - "80:80"
         tty: true
         container_name: mysimpleapp_app
 
 volumes:
-    data:
+    cache_data:
+    db_data:
 
 networks: 
+    cache-tier:
     back-tier:

@@ -15,6 +15,12 @@ COPY . .
 # Build the Go app
 RUN go build -o main .
 
-ENTRYPOINT ./main
-
 EXPOSE 80
+
+## THE LIFE SAVER
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.2.1/wait /wait
+RUN chmod +x /wait
+
+# Command to run the executable
+CMD /wait && ./main
+
