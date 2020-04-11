@@ -7,52 +7,114 @@
     <meta name="author" content="">
     <link rel="icon" href="/static/assets/favicon.ico">
 
-    <title>SimpleApp</title>
+    <title>Simple Form - SimpleApp</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="/static/css/cover.css" rel="stylesheet">
+    <link href="/static/css/form-validation.css" rel="stylesheet">
+    <link href="/static/css/sticky-footer-navbar.css" rel="stylesheet">
   </head>
 
-  <body class="text-center">
+  <body class="bg-light" style="padding-top: 3.5rem;">
 
-    <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
-      <header class="masthead mb-auto">
-        <div class="inner">
-          <h3 class="masthead-brand">SimpleApp</h3>
-          <nav class="nav nav-masthead justify-content-center">
-            <a class="nav-link active" href="#">{{.}} Visits</a>
-            <a class="nav-link" href="simpleform"> SimpleForm</a>
-            {{/* <a class="nav-link" href="simple_form_last5">MySQL Data</a> */}}
 
-          </nav>
+    <header>
+      <!-- Fixed navbar -->
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <a class="navbar-brand" href="/">SimpleApp</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+            </li>
+             <li class="nav-item">
+              <a class="nav-link" href="simpleform">Simple Form</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="simple_form_last5">MySQL Data</a>
+            </li>
+          </ul>
+            <button class="btn btn-sm btn-danger my-2 my-sm-0" type="button"><b>{{.}} Visits</b></button>
         </div>
-      </header>
+      </nav>
+    </header>
 
-      <main role="main" class="inner cover">
-        <h1 class="cover-heading">Welcome to SimpleApp</h1>
-        <p class="lead">A simple application built with Go, MySQL and Redis to demonstrate Docker, Compose, Swarm and Stack.</p>
-        <p class="lead">
-          <a href="https://docs.docker.com/" class="btn btn-lg btn-secondary">Learn more</a>
-        </p>
-      </main>
 
-      <footer class="mastfoot mt-auto">
-        <div class="inner">
-          <p>Prepared by <a href="https://jeshocarmel.github.io/about/">Jesho Carmel</a></p>
+     <main role="main">
+
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <div class="container">
+          <h1 class="display-3">Hello!This is SimpleApp</h1>
+          <p>A simple application built with Go, MySQL and Redis to demonstrate Docker, Compose, Swarm and Stack.</p>
+          <p><a class="btn btn-primary btn-lg" href="https://docs.docker.com/" role="button">Learn more &raquo;</a></p>
+        </div>
+      </div>
+
+      <div class="container">
+        <!-- Example row of columns -->
+        <div class="row">
+          <div class="col-md-4">
+            <h2>Docker</h2>
+            <p>Docker is a set of platform as a service products that uses OS-level virtualization to deliver software in packages called containers. Containers are isolated from one another and bundle their own software, libraries and configuration files; they can communicate with each other through well-defined channels. </p>
+            <p><a class="btn btn-secondary" href="https://docs.docker.com/" role="button">View details &raquo;</a></p>
+          </div>
+          <div class="col-md-4">
+            <h2>Swarm</h2>
+            <p>A Docker Swarm is a group of either physical or virtual machines that are running the Docker application and that have been configured to join together in a cluster. ... Docker swarm is a container orchestration tool, meaning that it allows the user to manage multiple containers deployed across multiple host machines. </p>
+            <p><a class="btn btn-secondary" href="https://docs.docker.com/engine/swarm/" role="button">View details &raquo;</a></p>
+          </div>
+          <div class="col-md-4">
+            <h2>Compose & Stack</h2>
+            <p>Docker Compose is an official tool that helps you manage your Docker containers by letting you define everything through a docker-compose.yml file. Docker stack is a command that’s embedded into the Docker CLI. It lets you manage a cluster of Docker containers through Docker Swarm.</p>
+            <p><a class="btn btn-secondary" href="https://nickjanetakis.com/blog/docker-tip-23-docker-compose-vs-docker-stack" role="button">View details &raquo;</a></p>
+          </div>
+        </div>
+
+        <hr>
+
+      </div> <!-- /container -->
+
+      <footer class="footer">
+        <div class="container">
+          <span class="text-muted">Developed by <a href="https://jeshocarmel.github.io/about/">Jesho Carmel</span>
         </div>
       </footer>
-    </div>
-
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    {{/* <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script> */}}
+    <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
     <script src="/static/js/popper.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
+    {{/* <script src="../../../../assets/js/vendor/holder.min.js"></script> */}}
+    <script>
+      // Example starter JavaScript for disabling form submissions if there are invalid fields
+      (function() {
+        'use strict';
+
+        window.addEventListener('load', function() {
+          // Fetch all the forms we want to apply custom Bootstrap validation styles to
+          var forms = document.getElementsByClassName('needs-validation');
+
+          // Loop over them and prevent submission
+          var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+              if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+              form.classList.add('was-validated');
+            }, false);
+          });
+        }, false);
+      })();
+    </script>
   </body>
 </html>

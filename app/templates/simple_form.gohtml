@@ -14,14 +14,39 @@
 
     <!-- Custom styles for this template -->
     <link href="/static/css/form-validation.css" rel="stylesheet">
+    <link href="/static/css/sticky-footer-navbar.css" rel="stylesheet">
   </head>
 
   <body class="bg-light">
 
+
+    <header>
+      <!-- Fixed navbar -->
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <a class="navbar-brand" href="/">SimpleApp</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+            </li>
+             <li class="nav-item">
+              <a class="nav-link" href="simpleform">Simple Form</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="simple_form_last5">MySQL Data</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+
     <div class="container">
       <div class="py-5 text-center">
         <h2>Simple Form</h2>
-        <p class="lead">Below is an example form which stores the data in MySQL<a href="simple_form_last5" target="_blank"><small>[see records]</small></a></p>
+        <p class="lead">Below is an example form which stores the data in MySQL.</p>
       </div>
 
       <div class="row">
@@ -58,6 +83,8 @@
                 <select class="custom-select d-block w-100" name="country" id="country" required>
                   <option value="">Choose...</option>
                   <option>United States</option>
+                  <option>India</option>
+                  <option>Malaysia</option>
                 </select>
                 <div class="invalid-feedback">
                   Please select a valid country.
@@ -74,11 +101,15 @@
           </form>
       </div>
 
-      <footer class="my-5 pt-5 text-muted text-center text-small">
-        <p>Prepared by <a href="https://jeshocarmel.github.io/about/">Jesho Carmel</a></p>
-
-      </footer>
     </div>
+
+
+      <footer class="footer">
+        <div class="container">
+          <span class="text-muted">Developed by <a href="https://jeshocarmel.github.io/about/">Jesho Carmel</span>
+        </div>
+      </footer>
+
 
     <!-- Bootstrap core JavaScript
     ================================================== -->

@@ -1,4 +1,4 @@
-version: '3'
+version: '3.1'
 services: 
     cache:
         build: 
@@ -16,19 +16,19 @@ services:
         build: 
             context: ./mysql_db
         image: jeshocarmel/mysimpleapp_db
-
+        volumes: 
+            - db_data:/var/lib/mysql
         networks: 
             - back-tier
+        environment: 
+            TZ: Asia/Singapore
+            MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_password
+            MYSQL_DATABASE: simple_db
         command: 
             --explicit_defaults_for_timestamp
             --default-authentication-plugin=mysql_native_password
-        environment: 
-            TZ: Asia/Singapore
-            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-            MYSQL_DATABASE: ${MYSQL_DATABASE}
-        volumes: 
-            - db_data:/var/lib/mysql
-
+        secrets:
+            - mysql_password
         tty: true
         container_name: mysimpleapp_db
 
@@ -38,9 +38,7 @@ services:
         image: jeshocarmel/mysimpleapp_app
         environment: 
             WAIT_HOSTS: db:3306
-            MYSQL_DATABASE: ${MYSQL_DATABASE}
-            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-            REDIS_PASSWORD: ${REDIS_PASSWORD}
+            MYSQL_DATABASE: simple_db
         depends_on: 
            - cache
            - db
@@ -51,7 +49,9 @@ services:
             - "80:80"
         tty: true
         container_name: mysimpleapp_app
-
+        secrets:
+            - mysql_password
+            - redis_password
 volumes:
     cache_data:
     db_data:
@@ -59,3 +59,9 @@ volumes:
 networks: 
     cache-tier:
     back-tier:
+
+secrets:
+    mysql_password:
+        file: ./devsecrets/mysql_password
+    redis_password:
+        file: ./devsecrets/redis_password

@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -47,8 +48,12 @@ func connectDB() {
 	dbDriver := "mysql"
 	dbHost := "db"
 	dbUser := "root"
-	dbPass := os.Getenv("MYSQL_ROOT_PASSWORD")
 	dbName := os.Getenv("MYSQL_DATABASE")
+
+	bytes, err := ioutil.ReadFile("/run/secrets/mysql_password")
+	dbPass := string(bytes)
+
+	fmt.Println("obtained MySQL password from secrets: ", dbPass)
 
 	db, err = sql.Open(dbDriver, dbUser+":"+dbPass+"@tcp("+dbHost+")/"+dbName+"?parseTime=true")
 
@@ -60,10 +65,16 @@ func connectDB() {
 }
 
 func connectRedisCache() {
+
+	bytes, err := ioutil.ReadFile("/run/secrets/redis_password")
+	password := string(bytes)
+
+	fmt.Println("obtained REDIS password from secrets: ", password)
+
 	cacheClient = redis.NewClient(&redis.Options{
 		Addr:     "cache:6379",
-		Password: os.Getenv("REDIS_PASSWORD"), // no password set
-		DB:       0,                           // use default DB
+		Password: password, // no password set
+		DB:       0,        // use default DB
 	})
 
 	pong, err := cacheClient.Ping().Result()

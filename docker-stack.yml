@@ -1,23 +1,49 @@
 version: '3.2'
 services: 
-    db:
-        image: jeshocarmel/mysimpleapp_db
+    cache:
+        image: jeshocarmel/mysimpleapp_cache:latest
         networks:
-            - back-tier
-        volumes: 
-            - data:/dump.rdb
+            - cache-tier
+        volumes:
+            - cache_data:/dump.rdb
         deploy:
             placement:
                 constraints:
                 - 'node.role == worker'
 
-    app:
-        image: jeshocarmel/mysimpleapp_app
-        depends_on: 
-           - db
+    db:
+        image: jeshocarmel/mysimpleapp_db:latest
+        secrets:
+            - mysql_password
         networks:
             - back-tier
-
+        volumes: 
+            - db_data:/var/lib/mysql
+        environment: 
+            TZ: Asia/Singapore
+            MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
+            MYSQL_DATABASE: simple_db
+        command: 
+            --explicit_defaults_for_timestamp
+            --default-authentication-plugin=mysql_native_password
+        deploy:
+            placement:
+                constraints:
+                - 'node.role == worker'
+    app:
+        image: jeshocarmel/mysimpleapp_app:latest
+        depends_on: 
+           - db
+           - cache
+        networks:
+            - back-tier
+            - cache-tier
+        secrets:
+            - mysql_password
+            - redis_password
+        environment: 
+            WAIT_HOSTS: db:3306
+            MYSQL_DATABASE: simple_db
         deploy:
             replicas: 2
             update_config:
@@ -31,7 +57,6 @@ services:
                 delay: 5s
                 max_attempts: 3
                 window: 120s
-          
         ports: 
             - "80:80"
         tty: true
@@ -51,7 +76,16 @@ services:
                 - 'node.role == manager'
 
 volumes:
-    data:
+    cache_data:
+    db_data:
+
 
 networks: 
     back-tier:
+    cache-tier:
+
+secrets:
+    mysql_password:
+        external: true
+    redis_password:
+        external: true
