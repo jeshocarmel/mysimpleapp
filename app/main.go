@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"text/template"
 	"time"
 
@@ -51,9 +52,9 @@ func connectDB() {
 	dbName := os.Getenv("MYSQL_DATABASE")
 
 	bytes, err := ioutil.ReadFile("/run/secrets/mysql_password")
-	dbPass := string(bytes)
+	dbPass := strings.TrimSpace(string(bytes))
 
-	fmt.Println("obtained MySQL password from secrets: ", dbPass)
+	fmt.Println("obtained MySQL password from secrets: ", dbPass, "hello")
 
 	db, err = sql.Open(dbDriver, dbUser+":"+dbPass+"@tcp("+dbHost+")/"+dbName+"?parseTime=true")
 
@@ -67,9 +68,9 @@ func connectDB() {
 func connectRedisCache() {
 
 	bytes, err := ioutil.ReadFile("/run/secrets/redis_password")
-	password := string(bytes)
+	password := strings.TrimSpace(string(bytes))
 
-	fmt.Println("obtained REDIS password from secrets: ", password)
+	fmt.Println("obtained REDIS password from secrets: ", password, "hello")
 
 	cacheClient = redis.NewClient(&redis.Options{
 		Addr:     "cache:6379",

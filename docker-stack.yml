@@ -10,7 +10,6 @@ services:
             placement:
                 constraints:
                 - 'node.role == worker'
-
     db:
         image: jeshocarmel/mysimpleapp_db:latest
         secrets:
@@ -21,7 +20,7 @@ services:
             - db_data:/var/lib/mysql
         environment: 
             TZ: Asia/Singapore
-            MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
+            MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_password
             MYSQL_DATABASE: simple_db
         command: 
             --explicit_defaults_for_timestamp
@@ -56,7 +55,7 @@ services:
                 condition: on-failure
                 delay: 5s
                 max_attempts: 3
-                window: 120s
+                window: 2m
         ports: 
             - "80:80"
         tty: true
